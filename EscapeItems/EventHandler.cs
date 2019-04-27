@@ -8,7 +8,7 @@ using scp4aiur;
 
 namespace EscapeItems
 {
-	class EventHandler : IEventHandlerCheckEscape, IEventHandlerSpawn
+	class EventHandler : IEventHandlerCheckEscape, IEventHandlerSpawn, IEventHandlerRoundRestart
 	{
 		private Dictionary<string, List<ItemType>> pItems = new Dictionary<string, List<ItemType>>();
 
@@ -23,6 +23,8 @@ namespace EscapeItems
 
 		public void OnSpawn(PlayerSpawnEvent ev)
 		{
+			if (ev.Player.TeamRole.Team == Team.CLASSD || ev.Player.TeamRole.Team == Team.SCIENTIST ||
+				ev.Player.TeamRole.Team == Team.NINETAILFOX || ev.Player.TeamRole.Team == Team.CHAOS_INSURGENCY)
 			Timing.InTicks(() =>
 			{
 				List<ItemType> pList = getPlayerItems(ev.Player);
@@ -41,6 +43,11 @@ namespace EscapeItems
 					pItems.Remove(ev.Player.SteamId);
 				}
 			}, 8);
+		}
+
+		public void OnRoundRestart(RoundRestartEvent ev)
+		{
+			pItems.Clear();
 		}
 
 		public void OnCheckEscape(PlayerCheckEscapeEvent ev)
