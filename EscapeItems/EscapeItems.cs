@@ -8,7 +8,7 @@ namespace EscapeItems
 	name = "Escape Items",
 	description = "Allows you to keep your items when you escape.",
 	id = "cyan.escapeitems",
-	version = "1.0.0",
+	version = "1.1.0",
 	SmodMajor = 3,
 	SmodMinor = 0,
 	SmodRevision = 0
