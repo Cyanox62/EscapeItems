@@ -14,11 +14,7 @@ namespace EscapeItems
 
 		private List<ItemType> getPlayerItems(Player player)
 		{
-			foreach (KeyValuePair<string, List<ItemType>> entry in pItems.Where(x => x.Key == player.SteamId))
-			{
-				return entry.Value;
-			}
-			return null;
+			return pItems.FirstOrDefault(x => x.Key == player.SteamId).Value;
 		}
 
 		public void OnSpawn(PlayerSpawnEvent ev)
@@ -30,15 +26,16 @@ namespace EscapeItems
 				List<ItemType> pList = getPlayerItems(ev.Player);
 				if (pList != null)
 				{
-					int c = 0;
-					while (ev.Player.GetInventory().Count < 8)
+					foreach (ItemType item in pList)
 					{
-						ev.Player.GiveItem(pList[c]);
-						c++;
-					}
-					for (int i = c; i < pList.Count; i++)
-					{
-						PluginManager.Manager.Server.Map.SpawnItem(pList[i], ev.Player.GetPosition(), Vector.Zero);
+						if (ev.Player.GetInventory().Count < 8)
+						{
+							ev.Player.GiveItem(item);
+						}
+						else
+						{
+							PluginManager.Manager.Server.Map.SpawnItem(item, ev.Player.GetPosition(), Vector.Zero);
+						}
 					}
 					pItems.Remove(ev.Player.SteamId);
 				}
